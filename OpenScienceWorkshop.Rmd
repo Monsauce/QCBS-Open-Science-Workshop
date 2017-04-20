@@ -1,0 +1,36 @@
+---
+title: "QCBS Open Science Workshop"
+author: "Monica Granados"
+date: '2017-04-19'
+output: pdf_document
+---
+
+# Mr. Verneaux and his magical adventures looking for fish in the Doubs River. 
+
+## Methods
+Fish were collected from the Doubs River which runs near the France–Switzerland border in the Jura Mountains. The fish are used to biological indicators for the different characterized eco-regions. 
+
+## Results
+
+```{r include=FALSE}
+#install packages
+require(RCurl)
+require(tidyr)
+require(ggplot2)
+doubs.URL <- getURL("https://raw.githubusercontent.com/Monsauce/QCBS-Open-Science-Workshop/master/doubsspe.csv")
+doubs<-read.csv(text=doubs.URL) 
+
+#the data is in wide form so let's convert it to long
+doubs.long<-gather(doubs, species, count, CHA:ANG)
+```
+
+The data set had a total richness of `r length(unique(doubs.long$species))`
+
+```{r, message=FALSE, fig.width=5, fig.height=6.5, echo=FALSE}
+#note you can set the size parameters of the figure 
+Figure.1<-ggplot(doubs.long, aes(count))+geom_histogram()+facet_wrap(~X)+theme_minimal()+xlab("Number of individuals")+ylab("Number of species")
+
+plot(Figure.1)  
+```
+
+Figure 1. Histogram for each site (1-30) of the frequency of number of individuals caught across species. 
